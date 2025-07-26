@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import './App.css';
-import peliculas from 'https://recomendaciones-backend-as9z.onrender.com/data/peliculas.json';
+///import peliculas from 'https://recomendaciones-backend-as9z.onrender.com/data/peliculas.json';
+
 function App() {
 const [input, setInput] = useState('');
-const [peliculasFiltradas, setPeliculasFiltradas] = useState(peliculas);
+const [peliculas, setPeliculas] = useState([]);
+const [peliculasFiltradas, setPeliculasFiltradas] = useState([]);
 const [recomendacionIA, setRecomendacionIA] = useState('');
 const [peliculasRecomendadas, setPeliculasRecomendadas] = useState([]);
+
+// Cargar el JSON remoto al montar el componente
+  useEffect(() => {
+    fetch('https://recomendaciones-backend-as9z.onrender.com/data/peliculas.json')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Películas cargadas:', data);  // <-- Añade esto
+        setPeliculas(data);
+        setPeliculasFiltradas(data);
+      })
+      .catch((error) => {
+        console.error('Error al cargar las películas:', error);
+      });
+  }, []);
+
 const handleBuscarTexto = () => {
+console.log('Buscando:', input);  // <-- Añade esto 
+console.log('Películas disponibles para buscar:', peliculas);   
 const texto = input.toLowerCase();
 const filtradas = peliculas.filter((peli) =>
 peli.titulo.toLowerCase().includes(texto) ||
@@ -26,8 +45,7 @@ const response = await fetch('https://recomendaciones-backend-as9z.onrender.com/
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({
-prompt: `Tengo una base de datos con estas películas:
-${peliculas.map(p => p.titulo).join(', ')}.
+prompt: `Tengo una base de datos con estas películas: ${peliculas.map(p => p.titulo).join(', ')}.
 Quiero que me digas solo los títulos de las películas que coincidan con esta
 descripción: "${input}".
 Devuélveme únicamente los títulos separados por comas.`
@@ -56,8 +74,7 @@ onChange={(e) => setInput(e.target.value)}
 required
 />
 <button onClick={handleBuscarTexto}>Buscar</button>
-<button onClick={handleBuscarDescripcion} className="btn-ia">
-Buscar por descripción</button>
+<button onClick={handleBuscarDescripcion} className="btn-ia">Buscar por descripción</button>
 </div>
 {recomendacionIA && (
 <div className="bloque-recomendaciones">
