@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import peliculas from './data/peliculas.json';
+import peliculas from 'https://recomendaciones-backend-as9z.onrender.com/data/peliculas.json';
 function App() {
 const [input, setInput] = useState('');
 const [peliculasFiltradas, setPeliculasFiltradas] = useState(peliculas);
@@ -22,7 +22,7 @@ setRecomendacionIA('Pensando...');
 setPeliculasRecomendadas([]);
 setPeliculasFiltradas([]);
 try {
-const response = await fetch('/api/recomendaciones', {
+const response = await fetch('https://recomendaciones-backend-as9z.onrender.com/api/recomendaciones', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({
