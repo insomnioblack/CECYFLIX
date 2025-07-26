@@ -22,7 +22,7 @@ setRecomendacionIA('Pensando...');
 setPeliculasRecomendadas([]);
 setPeliculasFiltradas([]);
 try {
-const response = await fetch('https://recomendaciones-backend-as9z.onrender.com/api/recomendaciones', {
+const response = await fetch('/api/recomendaciones', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({
